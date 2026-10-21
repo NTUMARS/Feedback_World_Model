@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://arxiv.org/abs/2605.15705"><img src="https://img.shields.io/badge/arXiv-2605.15705-b31b1b?logo=arxiv&logoColor=white" alt="arXiv" /></a>
   <a href="https://arxiv.org/pdf/2605.15705"><img src="https://img.shields.io/badge/Paper-PDF-d32f2f?logo=adobeacrobatreader&logoColor=white" alt="Paper PDF" /></a>
-  <a href="https://lorenzo-0-0.github.io/Feedback_World_Model/"><img src="https://img.shields.io/badge/Project_Page-Live-2ea44f?logo=googlechrome&logoColor=white" alt="Project Page" /></a>
+  <a href="https://ntumars.github.io/Feedback_World_Model/"><img src="https://img.shields.io/badge/Project_Page-Live-2ea44f?logo=googlechrome&logoColor=white" alt="Project Page" /></a>
   <img src="https://visitor-badge.laobi.icu/badge?page_id=Lorenzo-0-0.Feedback_World_Model&left_text=Visitors&right_color=blueviolet" alt="Visitors" />
 </p>
 
