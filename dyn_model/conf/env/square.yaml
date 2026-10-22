@@ -1,0 +1,25 @@
+# Robomimic Square (single arm). World model trained on the 200 proficient-human demonstrations.
+name: square
+dataset_class: dyn_model.datasets.robomimic_dset.RobomimicImageDynamicsModelDataset
+
+train_data_path: data/square/data/expert_demonstration/square_ph_demo.hdf5
+val_data_path: data/square/data/expert_demonstration/square_ph_demo_val.hdf5   # scripts/make_hdf5_subset.py
+
+# diffusion policy checkpoint whose ResNet backbone is reused as the frozen visual encoder
+policy_ckpt_path: ???
+
+frameskip: 8          # = n_action_steps of the Square policy
+view_names: ['agentview_image', 'robot0_eye_in_hand_image']
+action_dim: 10        # absolute action: pos(3) + rot6d(6) + gripper(1)
+proprio_dim: 9        # eef_pos(3) + eef_quat(4) + gripper_qpos(2)
+original_img_size: 140
+cropped_img_size: 128
+action_emb_dim: 240
+proprio_emb_dim: 16
+
+shape_obs:
+  robot0_eef_pos: {shape: [3]}
+  robot0_eef_quat: {shape: [4]}
+  robot0_gripper_qpos: {shape: [2]}
+  agentview_image: {shape: [3, 140, 140], type: rgb}
+  robot0_eye_in_hand_image: {shape: [3, 140, 140], type: rgb}

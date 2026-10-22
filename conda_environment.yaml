@@ -1,0 +1,54 @@
+name: fwm
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip=22.2.2
+  - cmake=3.24.3
+  - cffi=1.15.1
+  - llvm-openmp=14
+  - pip:
+      # core
+      - torch==2.8.0
+      - torchvision==0.23.0
+      - numpy==1.26.4
+      - scipy==1.13.1
+      - einops==0.4.1
+      - hydra-core==1.2.0
+      - omegaconf==2.2.3
+      - diffusers==0.11.1
+      - huggingface_hub==0.15.1
+      - transformers==4.21.3
+      - accelerate==0.13.2
+      - dill==0.3.5.1
+      - tqdm==4.64.1
+      - wandb==0.24.0
+      - filelock==3.19.1
+      - threadpoolctl==3.1.0
+      - scikit-learn==1.6.1
+      - scikit-image==0.19.3
+      - imageio==2.22.0
+      - imageio-ffmpeg==0.4.7
+      - matplotlib==3.6.1
+      - pandas==2.2.3
+      - pyarrow==9.0.0
+      - pytest>=7
+      # data
+      - zarr==2.12.0
+      - numcodecs==0.10.2
+      - imagecodecs==2022.9.26
+      - h5py==3.7.0
+      - av==10.0.0
+      - opencv-python==4.6.0.66
+      - numba==0.60.0
+      # simulation (off-screen EGL rendering)
+      - gym==0.21.0
+      - mujoco==2.3.5
+      - free-mujoco-py==2.1.6
+      - robosuite==1.4.1
+      - robomimic==0.3.0
+      - egl_probe==1.0.2
+      - bddl==3.6.0
+      - urllib3==1.26.18

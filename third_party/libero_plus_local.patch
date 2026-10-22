@@ -1,0 +1,51 @@
+diff --git a/libero/libero/benchmark/__init__.py b/libero/libero/benchmark/__init__.py
+index 8156148..a63a37e 100644
+--- a/libero/libero/benchmark/__init__.py
++++ b/libero/libero/benchmark/__init__.py
+@@ -45,15 +45,21 @@ class Task(NamedTuple):
+ 
+ def grab_language_from_filename(suite_name, x):
+     if "_language_" not in x:
+-        if x[0].isupper():  # LIBERO-100
+-            if "SCENE10" in x:
+-                language = " ".join(x[x.find("SCENE") + 8 :].split("_"))
++        # strip the perturbation suffix so that every variant of a task receives
++        # the instruction of the original LIBERO task
++        base = x.replace(".bddl", "")
++        for suffix_marker in ["_view_", "_add_", "_table_", "_tb_", "_level_", "_light_"]:
++            if suffix_marker in base:
++                base = base[: base.index(suffix_marker)]
++                break
++        if base[0].isupper():  # LIBERO-100
++            if "SCENE10" in base:
++                language = " ".join(base[base.find("SCENE") + 8 :].split("_"))
+             else:
+-                language = " ".join(x[x.find("SCENE") + 7 :].split("_"))
++                language = " ".join(base[base.find("SCENE") + 7 :].split("_"))
+         else:
+-            language = " ".join(x.split("_"))
+-        en = language.find(".bddl")
+-        return language[:en]
++            language = " ".join(base.split("_"))
++        return language
+     else:
+         if "_view_" in x:
+             bddl_file_path = os.path.join(
+@@ -183,7 +189,7 @@ class Benchmark(abc.ABC):
+                 self.tasks[i].init_states_file,
+             )
+ 
+-        init_states = torch.load(init_states_path)
++        init_states = torch.load(init_states_path, weights_only=False)
+         return init_states
+     
+     def get_task_init_states(self, i):
+@@ -239,7 +245,7 @@ class Benchmark(abc.ABC):
+         
+         # print("====init_states_path=====", init_states_path)
+ 
+-        init_states = torch.load(init_states_path)
++        init_states = torch.load(init_states_path, weights_only=False)
+         if "_add_" in self.tasks[i].init_states_file or "_level" in self.tasks[i].init_states_file:
+             init_states = init_states.reshape(1, -1)
+         return init_states

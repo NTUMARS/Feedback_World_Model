@@ -1,0 +1,30 @@
+# LIBERO-10 single-task world model (dual view, 50 demonstrations of one task).
+# Select the task with `task=<LIBERO-10 task name>` (see scripts/prepare_libero_single_task.py), e.g.
+#   python dyn_model/train.py env=libero10_single_task task=KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it
+name: libero10_${task}
+dataset_class: dyn_model.datasets.libero_dset.LiberoImageDynamicsModelDataset
+
+task_dir: data/libero_10_single_task/${task}
+train_data_path: ${env.task_dir}/single_task_dual_view_expert.zarr.zip
+val_data_path: ${env.task_dir}/single_task_dual_view_expert.zarr.zip
+data_dirs:
+  - ${env.task_dir}
+
+policy_ckpt_path: ???
+
+frameskip: 15
+view_names: ['agentview_rgb', 'eye_in_hand_rgb']
+action_dim: 10
+proprio_dim: 14       # ee_ori(4) + ee_pos(3) + joint_states(7)
+original_img_size: 128
+cropped_img_size: 114
+action_emb_dim: 240
+proprio_emb_dim: 20
+
+shape_obs:
+  ee_ori: {shape: [4]}
+  ee_pos: {shape: [3]}
+  joint_states: {shape: [7]}
+  language: {shape: [15]}
+  agentview_rgb: {shape: [3, 128, 128], type: rgb}
+  eye_in_hand_rgb: {shape: [3, 128, 128], type: rgb}

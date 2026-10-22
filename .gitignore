@@ -1,0 +1,28 @@
+# data, checkpoints, results
+data/
+results/
+outputs/
+wandb/
+*.ckpt
+*.pth
+*.hdf5
+*.zarr.zip
+*.zarr.zip.lock
+*.mp4
+
+# external simulators (git checkouts, see docs/external_simulators.md)
+LIBERO/
+LIBERO-plus/
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.hydra/
+*.log
+
+# editors
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,57 @@
+# World-model training (Appendix F). Run from the repository root:
+#   python dyn_model/train.py env=square
+#   python dyn_model/train.py env=libero10_single_task task=<LIBERO-10 task name>
+defaults:
+  - _self_
+  - env: square
+  - action_encoder: proprio
+  - proprio_encoder: proprio
+  - predictor: vit
+
+hydra:
+  run:
+    dir: data/outputs/world_model/${now:%Y.%m.%d}/${now:%H.%M.%S}_${env.name}
+
+wandb:
+  project: feedback_world_model
+  mode: online   # online | offline | disabled
+
+training:
+  seed: 0
+  epochs: 200
+  batch_size: 96
+  num_workers: 16
+  save_every_x_epoch: 10
+  predictor_lr: 5e-4
+  action_encoder_lr: 5e-4
+
+# One latent transition spans `frameskip` environment steps = one executed action
+# chunk of the policy (n_action_steps). Square uses 8, all other tasks use 15.
+frameskip: ${env.frameskip}
+
+# LIBERO-10 task name, used by env=libero10_single_task (e.g. task=KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it)
+task: null
+
+num_hist: 1
+num_pred: 1
+use_layernorm: True
+use_crop: True
+abs_action: True
+
+# convenience aliases used by the model loader
+train_data_path: ${env.train_data_path}
+val_data_path: ${env.val_data_path}
+view_names: ${env.view_names}
+original_img_size: ${env.original_img_size}
+cropped_img_size: ${env.cropped_img_size}
+action_emb_dim: ${env.action_emb_dim}
+proprio_emb_dim: ${env.proprio_emb_dim}
+policy_ckpt_path: ${env.policy_ckpt_path}
+
+model:
+  _target_: dyn_model.models.visual_dyn_model.VisualDynamicsModel
+  image_size: ${env.cropped_img_size}
+  num_hist: ${num_hist}
+  num_pred: ${num_pred}
+  train_encoder: False
+  train_predictor: True

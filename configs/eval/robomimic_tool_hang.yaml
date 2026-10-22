@@ -1,0 +1,40 @@
+# Robomimic Tool-Hang -- robot-initial-state OOD evaluation (Table 1 / Appendix B).
+#   python eval_robomimic.py --config-name=robomimic_tool_hang mode=fwm policy_checkpoint=... world_model_checkpoint=...
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+policy_checkpoint: ???          # <run>/checkpoints/<epoch>.ckpt from train_policy.py
+world_model_checkpoint: ???     # <run>/checkpoints/model_<epoch>.pth from dyn_model/train.py
+dataset_path: null              # expert demonstrations (defaults to the path stored in the policy checkpoint)
+
+mode: fwm                       # base | guidance | fwm
+output_dir: results/robomimic/tool_hang/${mode}
+device: cuda
+seed: ${test_start_seed}
+record_latents: false        # log per-step latents for scripts/latent_prediction_mse.py (guidance / fwm modes)
+
+n_test: 50
+test_start_seed: 100000
+n_test_vis: 0                   # number of episodes to record as video
+n_action_steps: 15
+max_steps: 700
+robot_perturbation_scale: 0.1   # std (rad) of the joint perturbation, Eq. 45
+
+guidance:
+  scale: 0.02                   # lambda (Eq. 7)
+  steps: 10                     # tau_g: guidance in the last `steps` of the 100 DDPM denoising steps
+  threshold: 11.44              # apply guidance when the current latent's squared distance to Z^E exceeds this
+  max_grad_norm: 1.0            # clip the guidance gradient norm (0 = off)
+
+planner:
+  feedback_gain: 0.1            # l (Eq. 10); the per-update correction is dt * l * e_t with dt = n_action_steps / control_freq
+  use_action_aware: false
+  action_aware_beta: 0.0        # beta (Eq. 15)
+  controllability_num_obs: 200  # M (Eq. 14)
+  controllability_num_actions: 32  # K (Eq. 14)
+  control_freq: 20.0
+  energy_views: null                   # all world-model views
+  proprio_in_energy: false
+  proprio_weight: 1.0

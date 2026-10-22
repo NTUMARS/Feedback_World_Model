@@ -1,0 +1,29 @@
+# Robomimic Transport (dual arm). World model trained on the 200 proficient-human demonstrations.
+name: transport
+dataset_class: dyn_model.datasets.robomimic_dset.RobomimicImageDynamicsModelDataset
+
+train_data_path: data/transport/data/expert_demonstration/transport_ph_demo.hdf5
+val_data_path: data/transport/data/expert_demonstration/transport_ph_demo_val.hdf5
+
+policy_ckpt_path: ???
+
+frameskip: 15
+view_names: ['robot0_eye_in_hand_image', 'robot1_eye_in_hand_image', 'shouldercamera0_image', 'shouldercamera1_image']
+action_dim: 20        # two arms x (pos(3) + rot6d(6) + gripper(1))
+proprio_dim: 18       # two arms x (eef_pos(3) + eef_quat(4) + gripper_qpos(2))
+original_img_size: 140
+cropped_img_size: 128
+action_emb_dim: 330
+proprio_emb_dim: 32
+
+shape_obs:
+  robot0_eef_pos: {shape: [3]}
+  robot0_eef_quat: {shape: [4]}
+  robot0_gripper_qpos: {shape: [2]}
+  robot1_eef_pos: {shape: [3]}
+  robot1_eef_quat: {shape: [4]}
+  robot1_gripper_qpos: {shape: [2]}
+  robot0_eye_in_hand_image: {shape: [3, 140, 140], type: rgb}
+  robot1_eye_in_hand_image: {shape: [3, 140, 140], type: rgb}
+  shouldercamera0_image: {shape: [3, 140, 140], type: rgb}
+  shouldercamera1_image: {shape: [3, 140, 140], type: rgb}

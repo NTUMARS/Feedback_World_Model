@@ -1,0 +1,43 @@
+# LIBERO-Plus Kitchen-S6 -- LIBERO-10 single task "KITCHEN_SCENE6_put_the_yellow_and_white_mug_in_the_microwave_and_close_it" (Table 1 / Appendix C, 42 Robot-Initial-State variants).
+#   python eval_libero_plus.py --config-name=libero_plus_kitchen_s6 mode=fwm policy_checkpoint=... world_model_checkpoint=...
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+policy_checkpoint: ???          # single-task policy, train_policy.py --config-name=libero10_single_task
+world_model_checkpoint: ???     # single-task world model, dyn_model/train.py env=libero10_single_task
+task: KITCHEN_SCENE6_put_the_yellow_and_white_mug_in_the_microwave_and_close_it
+task_suite_name: libero_10
+categories: ["Robot Initial States"]   # LIBERO-Plus perturbation categories to evaluate (null = all)
+task_classification_path: null  # defaults to <LIBERO-plus>/libero/libero/benchmark/task_classification.json
+demo_dataset_path: null         # defaults to data/libero_10_single_task/${task}/${task}_demo.hdf5
+
+mode: fwm                       # base | guidance | fwm
+output_dir: results/libero_plus/kitchen_s6/${mode}
+device: cuda
+seed: ${test_start_seed}
+record_latents: false        # log per-step latents for scripts/latent_prediction_mse.py (guidance / fwm modes)
+
+test_start_seed: 100000
+max_steps: 500
+n_action_steps: 15
+n_obs_steps: 2
+env_img_res: 128
+
+guidance:
+  scale: 0.5                    # lambda (Eq. 7)
+  steps: 15                     # tau_g: guidance in the last `steps` of the 100 DDPM denoising steps
+  threshold: 4                  # apply guidance when the current latent's squared distance to Z^E exceeds this
+  max_grad_norm: 0.0            # clip the guidance gradient norm (0 = off)
+
+planner:
+  feedback_gain: 0.6666667      # l (Eq. 10); the per-update correction is dt * l * e_t with dt = n_action_steps / control_freq = 0.75 s
+  use_action_aware: false
+  action_aware_beta: 0.0        # beta (Eq. 15)
+  controllability_num_obs: 200
+  controllability_num_actions: 32
+  control_freq: 20.0
+  energy_views: null            # both views
+  proprio_in_energy: true       # energy / feedback space = [visual latents x1, proprio latent x proprio_weight]
+  proprio_weight: 2.0

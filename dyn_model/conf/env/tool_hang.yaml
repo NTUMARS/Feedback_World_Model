@@ -1,0 +1,24 @@
+# Robomimic Tool-Hang (single arm). World model trained on the 200 proficient-human demonstrations.
+name: tool_hang
+dataset_class: dyn_model.datasets.robomimic_dset.RobomimicImageDynamicsModelDataset
+
+train_data_path: data/tool_hang/data/expert_demonstration/tool_hang_ph_demo.hdf5
+val_data_path: data/tool_hang/data/expert_demonstration/tool_hang_ph_demo_val.hdf5
+
+policy_ckpt_path: ???
+
+frameskip: 15
+view_names: ['sideview_image', 'robot0_eye_in_hand_image']
+action_dim: 10
+proprio_dim: 9
+original_img_size: 140
+cropped_img_size: 128
+action_emb_dim: 240
+proprio_emb_dim: 16
+
+shape_obs:
+  robot0_eef_pos: {shape: [3]}
+  robot0_eef_quat: {shape: [4]}
+  robot0_gripper_qpos: {shape: [2]}
+  sideview_image: {shape: [3, 140, 140], type: rgb}
+  robot0_eye_in_hand_image: {shape: [3, 140, 140], type: rgb}
